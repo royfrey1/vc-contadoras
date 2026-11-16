@@ -1,0 +1,13 @@
+# Se permite el rastreo a propósito, también en la DEMO.
+#
+# La demo no se indexa porque cada página lleva <meta name="robots" content="noindex, nofollow">
+# (lo agrega vite.config.js cuando VITE_DEMO=true) y Vercel envía el header
+# "X-Robots-Tag: noindex, nofollow" (vercel.json). Para que los buscadores vean
+# esas señales tienen que poder rastrear la página: un "Disallow: /" les impediría
+# leer el noindex y la URL podría aparecer igual en resultados si alguien la enlaza.
+#
+# Al pasar a producción este archivo puede quedar como está (opcionalmente,
+# agregar "Sitemap: https://DOMINIO-DEFINITIVO/sitemap.xml" si se crea un sitemap).
+
+User-agent: *
+Allow: /

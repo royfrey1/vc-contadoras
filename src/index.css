@@ -1,0 +1,113 @@
+@import 'tailwindcss';
+
+/*
+ * Identidad VC Contadoras: solo crema (#fbf8f7) y grafito (#33383b).
+ * Se resetea la paleta por defecto de Tailwind para que no se cuelen otros colores;
+ * los tonos intermedios son mezclas de ambos.
+ */
+@theme {
+  --color-*: initial;
+  --color-cream: #fbf8f7; /* fondo principal */
+  --color-sand: #f1eeee; /* crema + 5% grafito: fondos alternos */
+  --color-line: #dfdddd; /* crema + 14% grafito: bordes y separadores */
+  --color-stone: #65686a; /* grafito + 25% crema: textos secundarios (AA: 5.3:1 sobre crema, 4.9:1 sobre sand) */
+  --color-ink-soft: #474b4e; /* grafito + 10% crema: hover sobre grafito */
+  --color-ink: #33383b; /* texto, fondos oscuros y acentos */
+
+  --font-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
+
+  --ease-elegant: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Cinta infinita: el contenido va duplicado y se desplaza la mitad de su ancho */
+  --animate-marquee: marquee 70s linear infinite;
+  @keyframes marquee {
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+}
+
+/* Zonas oscuras: el anillo de foco pasa a crema (ver :focus-visible). Las secciones con
+   data-nav-theme="dark" ya lo aplican; esta utilidad es para tarjetas o paneles grafito sueltos. */
+@utility focus-on-dark {
+  --focus-ring: var(--color-cream);
+}
+
+/* Etiquetas pequeñas en mayúsculas espaciadas (como "CONTADORAS" del logo) */
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+@layer base {
+  :root {
+    --focus-ring: var(--color-ink);
+  }
+
+  [data-nav-theme='dark'] {
+    --focus-ring: var(--color-cream);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* El navbar fijo (4 rem compacto) no tapa los títulos al navegar por anclas
+       ni los elementos que reciben foco con Tab */
+    scroll-padding-top: 4.5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  /* Párrafos y citas: evita una palabra sola en la última línea */
+  p,
+  blockquote,
+  li {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+  }
+
+  /* Foco visible en todo el sitio: 2 px grafito sobre fondos claros y crema sobre los oscuros.
+     (No se usa currentColor: en las pills activas el texto es crema y el anillo se perdía sobre el fondo.) */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  /* Destinos de foco programático (skip link, menú mobile): sin anillo alrededor de toda la sección */
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
